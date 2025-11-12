@@ -5,7 +5,9 @@ void DZ_Cow();
 void DZ_23_09();
 void DZ_30_09();
 void DZ_09_10();
-void DZ_11_11();
+void DZ_14_10();
+void DZ_28_10();
+
 int DelCheck(int arr[], int num)
 {
 	for (size_t i = 0; i < 3; i++)
@@ -44,6 +46,137 @@ void DynamicArrDelete(int* &ptr) {
 void DynamicArrLastAdd(int* &ptr, int size, int number) {
 	ptr[size - 1] = number;
 }
+void TrainAdd(int** &train, int wagons, int seats, int choise) 
+{
+	train = new int* [wagons];
+	if (choise == 1)
+	{
+		for (int i = 0; i < wagons; i++)
+		{
+			train[i] = new int[seats];
+			for (int j = 0; j < seats; j++)
+			{
+				train[i][j] = rand() % 2;
+				std::cout << train[i][j];
+			}
+			std::cout << "\n";
+		}
+	}
+	else if (choise == 2)
+	{
+		for (int i = 0; i < wagons; i++)
+		{
+			train[i] = new int[seats];
+			for (int j = 0; j < seats; j++)
+			{
+				train[i][j] = 0;
+				std::cout << train[i][j];
+			}
+			std::cout << "\n";
+		}
+	}
+}
+void SeatChoise(int**& train) 
+{
+	int wagon, seat;
+	char choise;
+	while (true)
+	{
+		std::cout << "Выберете вагон: ";
+		std::cin >> wagon;
+		if (wagon < 0 || wagon > 18)
+		{
+			std::cout << "Ошибка вагона!\n";
+		}
+		else
+		{
+			break;
+		}
+	}
+	while (true)
+	{
+		std::cout << "Выберете место: ";
+		std::cin >> seat;
+		if (seat < 0 || seat > 36)
+		{
+			std::cout << "Ошибка места!\n";
+		}
+		else
+		{
+			break;
+		}
+	}
+	if (train[wagon][seat] == 0)
+	{
+		std::cout << "Это место свободно.\n" 
+			<< "Желаете забронировать?\n"
+			<< "Выбор (y/n): ";
+		std::cin >> choise;
+		if (choise == 'y')
+		{
+			std::cout << "Вы забронировали место " << seat << " в вагоне " << wagon << ".\n";
+			train[wagon][seat] = 1;
+		}
+		else
+		{
+			std::cout << "Как хотетие.\n";
+		}
+	}
+	else if (train[wagon][seat] == 1)
+	{
+		std::cout << "Это место занято.\n"
+			<< "Желаете освободить?\n"
+			<< "Выбор (y/n): ";
+		std::cin >> choise;
+		if (choise == 'y')
+		{
+			std::cout << "Вы освободили место " << seat << " в вагоне " << wagon << ".\n";
+			train[wagon][seat] = 0;
+		}
+		else
+		{
+			std::cout << "Как хотетие.\n";
+		}
+	}
+}
+void SeatClear(int**& train, int wagons, int seats) 
+{
+	int clear = 0, choise;
+	std::cout << "Выберете вагон или поезд(0).";
+	std::cin >> choise;
+	if (choise == 0)
+	{
+		for (int i = 0; i < wagons; i++)
+		{
+			for (int j = 0; j < seats; j++)
+			{
+				if (train[i][j] = 0)
+				{
+					clear++;
+				}
+			}
+		}
+		std::cout << "В поезде - " << clear << " свободных мест.\n\n";
+	}
+	else if (choise > 0 && choise <= 18)
+	{
+		for (int j = 0; j < seats; j++)
+		{
+			if (train[choise][j] = 0)
+			{
+				clear++;
+			}
+		}
+	std::cout << "В " << choise << " вагоне - " << clear << " свободных мест.\n\n";
+	}
+}
+void TrainDelete(int**& train, int wagons, int seats) {
+	for (int i = 0; i < wagons; i++)
+	{
+		delete[]train[i];
+	}
+	delete[]train;
+}
 
 int main()
 {
@@ -58,7 +191,8 @@ int main()
 		<< "23_09 (3) \n"
 		<< "30_09 (4) \n"
 		<< "09_10 (5) \n"
-		<< "11_11 (6) \n"
+		<< "14_10 (6) \n"
+		<< "28_10 (7) \n"
 		<< "Открыть: ";
 	std::cin >> choise;
 
@@ -85,14 +219,18 @@ int main()
 	}
 	else if (choise == 6)
 	{
-		DZ_11_11();
+		DZ_14_10();
+	}
+	else if (choise == 7)
+	{
+		DZ_28_10();
 	}
 
 
 	return 0;
 	}
 
-	void DZ_11_11() {
+	void DZ_28_10() {
 		int* ptr;
 		int number;
 		int size;
@@ -113,6 +251,41 @@ int main()
 		DynamicArrLastAdd(ptr, size, number);
 		DynamicArrPrint(ptr, size);
 		DynamicArrDelete(ptr);
+	}
+	void DZ_14_10() {
+		int wagon = 18, seat = 36, choise;
+		int** train;
+		std::cout << "Режимы запонения:\n"
+				<< "Рандом (1)\n"
+				<< "Пусто (2)\n"
+				<< "Выбор: ";
+		std::cin >> choise;
+		TrainAdd(train, wagon, seat, choise);
+		while (true)
+		{
+			choise = 0;
+			std::cout << "Выберете действие: \n"
+				<< "Выбор места (1)\n"
+				<< "Узнать количсество свободных мест (2)\n"
+				<< "Закончить (3)\n"
+				<< "Выбор: ";
+			std::cin >> choise;
+			if (choise == 1)
+			{
+				SeatChoise(train);
+			}
+			else if (choise == 2)
+			{
+				SeatClear(train, wagon, seat);
+			}
+			else if (choise == 3)
+			{
+				break;
+			}
+		}
+	
+
+		TrainDelete(train, wagon, seat);
 	}
 	void DZ_09_10() {
 		double fruit[]{ 90, 95, 110, 85 }; //Яблоко, Апельсин, Абрикос, Груша
