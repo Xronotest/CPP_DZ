@@ -6,7 +6,8 @@ void DZ_23_09();
 void DZ_30_09();
 void DZ_09_10();
 void DZ_14_10();
-void DZ_28_10();
+void DZ_28_10()
+void DZ_30_10();
 
 int DelCheck(int arr[], int num)
 {
@@ -177,6 +178,97 @@ void TrainDelete(int**& train, int wagons, int seats) {
 	}
 	delete[]train;
 }
+void ElementAdd(int*& ptr, int size) {
+	DynamicArr(ptr, size);
+	DynamicArrPrint(ptr, size)
+
+	int* copy[size + 1];
+	int id, number;
+	for (size_t i = 0; i < size; i++)
+	{
+		copy[i] = ptr[i];
+	}
+
+	DynamicArrDelete(ptr);
+
+	ptr = new int[size + 1];
+
+	while (true)
+	{
+		std::cout << "Введите индекс: ";
+		std::cin >> id;
+		if (id >= 0 || id < size + 1)
+		{
+			break;
+		}
+		std::cout << "Ошибка! Неверный индекс!\n";
+	}
+
+	std::cout << "Введите число: ";
+	std::cin >> number;
+
+	for (size_t i = 0; i < size + 1; i++)
+	{
+		if (i < id)
+		{
+			ptr[i] = copy[i];
+		}
+		else if (i = id)
+		{
+			ptr[i] = number;
+		}
+		else if (i > id)
+		{
+			ptr[i] = copy[i - 1]
+		}
+	}
+
+	DynamicArrPrint(ptr, size + 1)
+	DynamicArrDelete(ptr);
+	DynamicArrDelete(copy);
+}
+void ElementRemove(int*& ptr, int size) {
+	DynamicArr(ptr, size);
+	DynamicArrPrint(ptr, size)
+
+	int* copy[size];
+	int id;
+	for (size_t i = 0; i < size; i++)
+	{
+		copy[i] = ptr[i];
+	}
+
+	DynamicArrDelete(ptr);
+
+	ptr = new int[size - 1];
+
+	while (true)
+	{
+		std::cout << "Введите индекс: ";
+		std::cin >> id;
+		if (id >= 0 || id < size)
+		{
+			break;
+		}
+		std::cout << "Ошибка! Неверный индекс!\n";
+	}
+
+	for (size_t i = 0; i < size - 1; i++)
+	{
+		if (i < id)
+		{
+			ptr[i] = copy[i];
+		}
+		else if (i >= id)
+		{
+			ptr[i] = copy[i + 1];
+		}
+	}
+
+	DynamicArrPrint(ptr, size + 1)
+	DynamicArrDelete(ptr);
+	DynamicArrDelete(copy);
+}
 
 int main()
 {
@@ -192,7 +284,8 @@ int main()
 		<< "30_09 (4) \n"
 		<< "09_10 (5) \n"
 		<< "14_10 (6) \n"
-		<< "28_10 (7) \n"
+		<< "28_10 (7) \n
+		<< "30_10 (8) \n"
 		<< "Открыть: ";
 	std::cin >> choise;
 
@@ -224,12 +317,40 @@ int main()
 	else if (choise == 7)
 	{
 		DZ_28_10();
+	
+	else if (choise == 8)
+	{
+		DZ_30_10();
 	}
 
 
 	return 0;
 	}
+	void DZ_30_10() 
+	{
+		int* ptr;
+		int choose;
+		int size;
 
+		std::cout << "Введите размер массива: ";
+		std::cin >> size;
+
+		std::cout << "Выберете действие: " <<
+					"1 - Добавить число" <<
+					"2 - Удалить число";
+		std::cin >> choose;
+
+		if (choose == 1)
+		{
+			ElementAdd(ptr, size);
+		}
+		else if (choose == 2)
+		{
+			ElementRemove(ptr, size);
+		}
+	
+		delete ptr;
+	}
 	void DZ_28_10() {
 		int* ptr;
 		int number;
