@@ -1,4 +1,12 @@
 #include <iostream>
+#include <string>
+#include <windows.h>
+#include <limits>
+
+#ifdef max
+#undef max
+#endif // max
+
 
 void DZ_18_09();
 void DZ_Cow();
@@ -8,6 +16,7 @@ void DZ_09_10();
 void DZ_14_10();
 void DZ_28_10();
 void DZ_30_10();
+void DZ_06_11();
 
 int DelCheck(int arr[], int num)
 {
@@ -269,10 +278,66 @@ void ElementRemove(int*& ptr, int size) {
 	DynamicArrDelete(ptr);
 	DynamicArrDelete(copy);
 }
+bool WordCheck(std::string text, std::string word) {
+	int* textArr = new int[text.size()];
+	int* wordArr = new int[word.size()];
+	int i = 0, check = 0;
+
+	for (char c : text) {
+		textArr[i] = c;
+		i++;
+	}
+	std::cout << "\n";
+	i = 0;
+	for (char c : word) {
+		wordArr[i] = c;
+		i++;
+	}
+	std::cout << "\n";
+
+	for (size_t i = 0, j = 0; i < text.size(); i++, j ++)
+	{
+		if (textArr[i] < -32)
+		{
+			textArr[i] += 32;
+		}
+
+		if (wordArr[j] < -32)
+		{
+			wordArr[j] += 32;
+		}
+
+		while (textArr[i] != 32)
+		{
+			if (textArr[i] == wordArr[j])
+			{
+				check += 1;
+			}
+			if (check == word.size())
+			{
+				delete[]textArr, wordArr;
+				return true;
+			}
+			else if (check != word.size())
+			{
+				break;
+			}
+		}
+		if (textArr[i] == 32)
+		{
+			check = 0;
+			j = -1;
+		}
+	}
+
+	delete[]textArr, wordArr;
+	return false;
+}
 
 int main()
 {
-	setlocale(LC_ALL, "RUS");
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
 	srand(time(NULL));
 
 	int choise = 0;
@@ -286,6 +351,7 @@ int main()
 		<< "14_10 (6) \n"
 		<< "28_10 (7) \n"
 		<< "30_10 (8) \n"
+		<< "06_11 (9) \n"
 		<< "Открыть: ";
 	std::cin >> choise;
 
@@ -321,11 +387,109 @@ int main()
 	{
 		DZ_30_10();
 	}
+	else if (choise == 9)
+	{
+		DZ_06_11();
+	}
 
 
 	return 0;
+}
+
+void DZ_06_11() 
+{
+	std::string text;
+	std::string word;
+	int* textArr;
+	int* textArrToch;
+	int size;
+
+	
+	while (true)
+	{
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Введите предложение: ";
+		std::getline(std::cin, text, '\n');
+		if (text.size() == 0)
+		{
+			std::cout << "Ошибка! Текст слишком маленький!";
+		}
+		else
+		{
+			break;
+		}
 	}
-	void DZ_30_10() 
+	size = text.size();
+
+	textArr = new int[size];
+	int i = 0;
+
+	for (char c : text) {
+		textArr[i] = c;
+		i++;
+	}
+	std::cout << "\n";
+	for (size_t i = 0; i < size; i++)
+	{
+		if (textArr[i - 1] == 32 && textArr[i] > -32 || i == 0 && textArr[0] > -32)
+		{
+			textArr[i] -= 32;
+		}
+		if (textArr[i - 1] != 32 && i != 0 && textArr[i] < -32)
+		{
+			textArr[i] += 32;
+		}
+	}
+	if (textArr[size - 1] != 46)
+	{
+		textArrToch = new int[size + 1];
+		for (size_t i = 0; i < size + 1; i++)
+		{
+			textArrToch[i] = textArr[i];
+		}
+		textArrToch[size] = 46;
+		for (size_t i = 0; i < size + 1; i++)
+		{
+			std::cout << (char)textArrToch[i];
+		}
+	}
+	else
+	{
+		for (size_t i = 0; i < size; i++)
+		{
+			std::cout << (char)textArr[i];
+		}
+	}
+
+	std::cout << "\n";
+	
+	while (true)
+	{
+		std::cout << "Нажмите Enter\n";
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Введите слово: ";
+		std::getline(std::cin, word, '\n');
+		if (text.size() == 0)
+		{
+			std::cout << "Ошибка! Текст слишком маленький!\n";
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	if (WordCheck(text, word) == true)
+	{
+		std::cout << "Это слово есть в тексте!";
+	}
+	else
+	{
+		std::cout << "Этого слова нет в тексте!";
+	}
+	delete[]textArr, textArrToch;
+}
+void DZ_30_10() 
 	{
 		int* ptr;
 		int choose;
@@ -349,7 +513,7 @@ int main()
 			ElementRemove(ptr, size);
 		}
 	}
-	void DZ_28_10() {
+void DZ_28_10() {
 		int* ptr;
 		int number;
 		int size;
@@ -371,7 +535,7 @@ int main()
 		DynamicArrPrint(ptr, size);
 		DynamicArrDelete(ptr);
 	}
-	void DZ_14_10() {
+void DZ_14_10() {
 		int wagon = 18, seat = 36, choise;
 		int** train;
 		std::cout << "Режимы запонения:\n"
@@ -406,7 +570,7 @@ int main()
 
 		TrainDelete(train, wagon, seat);
 	}
-	void DZ_09_10() {
+void DZ_09_10() {
 		double fruit[]{ 90, 95, 110, 85 }; //Яблоко, Апельсин, Абрикос, Груша
 		double veget[]{ 110, 130, 100 }; //Томат, Лук, Огурец
 		double tea[]{ 70, 80 }; //Чеснок, Петрушка
@@ -587,7 +751,7 @@ int main()
 			}
 		}
 	}
-	void DZ_30_09() {
+void DZ_30_09() {
 
 		std::cout << "\nЗадание 1 \n";
 
@@ -681,7 +845,7 @@ int main()
 		std::cout << "Минимум был в " << minPrice + 1 << std::endl
 			<< "Максимум был в " << maxPrice + 1 << std::endl;
 	}
-	void DZ_23_09() {
+void DZ_23_09() {
 
 		std::cout << "Задание 1 \n";
 
@@ -760,7 +924,7 @@ int main()
 
 		std::cout << "Максимальное число: " << max;
 	}
-	void DZ_18_09() {
+void DZ_18_09() {
 
 		std::cout << "Задание 1.\n\n";
 
@@ -844,7 +1008,7 @@ int main()
 		std::cout << "95: " << distance3 / 100 * lessFuel * fuelPrice[1] << "\n";
 		std::cout << "Дизель: " << distance3 / 100 * lessFuel * fuelPrice[2] << "\n";
 	}
-	void DZ_Cow() {
+void DZ_Cow() {
 		std::cout << ".    .\n" << ".\t.\n";
 
 		std::cout << " _____________________\n"
